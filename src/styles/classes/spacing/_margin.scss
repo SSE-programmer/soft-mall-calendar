@@ -2,7 +2,7 @@ $margins: 0, 2, 4, 6, 8, 12, 16, 24;
 
 :root {
     @each $margin in $margins {
-        --sm-margin-#{$margin}: #{$margins}px;
+        --sm-margin-#{$margin}: #{$margin}px;
     }
 }
 
