@@ -2,11 +2,10 @@
     setup
     lang="ts"
 >
-import MainLayout from '@/layouts/main-layout/MainLayout.vue';
 </script>
 
 <template>
-    <MainLayout></MainLayout>
+    Calendar
 </template>
 
 <style scoped>

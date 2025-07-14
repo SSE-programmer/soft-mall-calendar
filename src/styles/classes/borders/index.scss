@@ -1,0 +1,37 @@
+$border-radii: 4, 6, 8, 10, 12, 16, 20, 24, 30;
+
+:root {
+    @each $border-radius in $border-radii {
+        --sm-border-radius-#{$border-radius}: #{$border-radius}px;
+    }
+}
+
+.sm-default-border {
+    border: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}
+
+.sm-default-border-t {
+    border-top: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}
+
+.sm-default-border-r {
+    border-right: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}
+
+.sm-default-border-b {
+    border-bottom: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}
+
+.sm-default-border-l {
+    border-left: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}
+
+.sm-default-border-v {
+    border-top: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+    border-bottom: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}
+
+.sm-default-border-h {
+    border-left: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+    border-right: var(--sm-border-default-color) var(--sm-border-radius-4) dashed;
+}

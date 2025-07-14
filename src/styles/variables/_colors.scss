@@ -1,0 +1,36 @@
+:root {
+    --sm-white-color: #FFFFFF;
+
+    --sm-border-default-color: #272736;
+    --sm-border-hover-color: #474756;
+
+    --sm-shadow-default-color: #272736;
+
+    --sm-primary-color: #222231;
+    --sm-middle-primary-color: #272736;
+    --sm-light-primary-color: #44445e;
+    --sm-ultra-light-primary-color: #686893;
+
+    --sm-accent-color: #4d4dc8;
+    --sm-light-accent-color: #d4d4d5;
+
+    --sm-gray-default-color: #9A9A9A;
+    --sm-gray-middle-color: #D9D9D9;
+    --sm-gray-light-color: #F5F5F5;
+
+    --sm-error-color: #FF3F3F;
+
+    --sm-bg-light-color: #f8ffff;
+    --sm-bg-middle-color: #34344e;
+    --sm-bg-primary-color: var(--sm-primary-color);
+    --sm-bg-modals-color: #f8ffffdd;
+    --sm-bg-modals-wrapper-color: #34344e22;
+    --sm-bg-skill-tags-color: #732031;
+    --sm-bg-error-color: #FFD6DE;
+
+    --sm-text-default-color: var(--sm-primary-color);
+    --sm-text-middle-color: var(--sm-middle-primary-color);
+    --sm-text-light-color: var(--sm-light-primary-color);
+
+    --sm-modals-box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, .5), -2px -2px 10px 5px rgba(255, 255, 255, .5);
+}

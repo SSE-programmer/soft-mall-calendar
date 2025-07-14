@@ -1,0 +1,13 @@
+$text-sizes: 8, 12, 14, 16, 18, 20, 22, 26, 34, 40, 48;
+
+:root {
+    @each $text-size in $text-sizes {
+        --sm-font-size-#{$text-size}: #{$text-size}px;
+    }
+}
+
+@each $text-size in $text-sizes {
+    .sm-text-#{$text-size} {
+        font-size: var(--sm-font-size-#{$text-size});
+    }
+}

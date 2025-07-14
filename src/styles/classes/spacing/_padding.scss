@@ -1,0 +1,39 @@
+$paddings: 0, 2, 4, 6, 8, 12, 16, 24;
+
+:root {
+    @each $padding in $paddings {
+        --sm-padding-#{$padding}: #{$padding}px;
+    }
+}
+
+@each $padding in $paddings {
+    .sm-p-#{$padding} {
+        padding: var(--sm-padding-#{$padding});
+    }
+
+    .sm-pt-#{$padding} {
+        padding-top: var(--sm-padding-#{$padding});
+    }
+
+    .sm-pr-#{$padding} {
+        padding-right: var(--sm-padding-#{$padding});
+    }
+
+    .sm-pb-#{$padding} {
+        padding-bottom: var(--sm-padding-#{$padding});
+    }
+
+    .sm-pl-#{$padding} {
+        padding-left: var(--sm-padding-#{$padding});
+    }
+
+    .sm-pv-#{$padding} {
+        padding-top: var(--sm-padding-#{$padding});
+        padding-bottom: var(--sm-padding-#{$padding});
+    }
+
+    .sm-ph-#{$padding} {
+        padding-left: var(--sm-padding-#{$padding});
+        padding-right: var(--sm-padding-#{$padding});
+    }
+}

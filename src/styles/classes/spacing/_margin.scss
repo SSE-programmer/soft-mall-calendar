@@ -1,0 +1,39 @@
+$margins: 0, 2, 4, 6, 8, 12, 16, 24;
+
+:root {
+    @each $margin in $margins {
+        --sm-margin-#{$margin}: #{$margins}px;
+    }
+}
+
+@each $margin in $margins {
+    .sm-m-#{$margin} {
+        margin: var(--sm-margin-#{$margin});
+    }
+
+    .sm-mt-#{$margin} {
+        margin-top: var(--sm-margin-#{$margin});
+    }
+
+    .sm-mr-#{$margin} {
+        margin-right: var(--sm-margin-#{$margin});
+    }
+
+    .sm-mb-#{$margin} {
+        margin-bottom: var(--sm-margin-#{$margin});
+    }
+
+    .sm-ml-#{$margin} {
+        margin-left: var(--sm-margin-#{$margin});
+    }
+
+    .sm-mv-#{$margin} {
+        margin-top: var(--sm-margin-#{$margin});
+        margin-bottom: var(--sm-margin-#{$margin});
+    }
+
+    .sm-mh-#{$margin} {
+        margin-left: var(--sm-margin-#{$margin});
+        margin-right: var(--sm-margin-#{$margin});
+    }
+}
