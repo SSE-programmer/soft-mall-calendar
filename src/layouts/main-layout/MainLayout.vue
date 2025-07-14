@@ -29,8 +29,8 @@ import { RouterLink, RouterView } from 'vue-router';
 </template>
 
 <style scoped>
-    .link.router-link-active {
-        color: #ffffff;
-        text-decoration: underline;
-    }
+.link.router-link-active {
+    color: #ffffff;
+    text-decoration: underline;
+}
 </style>
