@@ -1,8 +1,16 @@
 <script
     setup
     lang="ts"
-></script>
+>
+</script>
 
 <template>
-    Description
+    <div class="sm-flex sm-flex-col sm-gap-12">
+        <p class="sm-font-bold">Требуется реализовать календарь сотрудника с тремя с функциями:</p>
+        <ol class="sm-ml-12">
+            <li>1. Функция создания задания</li>
+            <li>2. Функция загрузки задания из JSON</li>
+            <li>3. Функция выгрузки задания в JSON</li>
+        </ol>
+    </div>
 </template>
