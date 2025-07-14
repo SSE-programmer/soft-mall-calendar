@@ -6,12 +6,12 @@ const router = createRouter({
         {
             path: '/',
             name: 'calendar',
-            component: () => import('@/pages/calendar-view/CalendarView.vue')
+            component: () => import('@/pages/calendar-view/calendar-view.vue')
         },
         {
             path: '/description',
             name: 'description',
-            component: () => import('@/pages/description-view/DescriptionView.vue'),
+            component: () => import('@/pages/description-view/description-view.vue'),
         },
     ],
 });

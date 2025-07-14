@@ -1,10 +1,3 @@
-<script
-    setup
-    lang="ts"
->
-import { RouterLink, RouterView } from 'vue-router';
-</script>
-
 <template>
     <header class="sm-flex sm-gap-12 sm-items-center sm-justify-between sm-p-12 sm-bg-middle-background">
         <h1 class="sm-light-accent-color">Soft Mall - Calendar</h1>
@@ -13,12 +6,14 @@ import { RouterLink, RouterView } from 'vue-router';
             <RouterLink
                 class="link sm-light-accent-color sm-text-22"
                 to="/"
-            >Calendar
+            >
+                Calendar
             </RouterLink>
             <RouterLink
                 class="link sm-light-accent-color sm-text-22"
                 to="/description"
-            >Description
+            >
+                Description
             </RouterLink>
         </nav>
     </header>
@@ -28,7 +23,16 @@ import { RouterLink, RouterView } from 'vue-router';
     </div>
 </template>
 
-<style scoped>
+<script
+    setup
+    lang="ts"
+>
+import { RouterLink, RouterView } from 'vue-router';
+</script>
+
+<style
+    scoped
+>
 .link.router-link-active {
     color: #ffffff;
     text-decoration: underline;
