@@ -3,7 +3,12 @@
     lang="ts"
 >
 import CalendarViewHeader from '@/pages/calendar-view/components/calendar-view-header/calendar-view-header.vue';
+import { ref } from 'vue';
 import pButton from 'primevue/button';
+import pDatePicker from 'primevue/datepicker';
+import CalendarViewGridWeek from '@/pages/calendar-view/components/calendar-view-grid/calendar-view-grid-week.vue';
+
+const date = ref();
 </script>
 
 <template>
@@ -14,10 +19,16 @@ import pButton from 'primevue/button';
             >
                 + Создать событие
             </p-button>
-            Calendar
+            <p-date-picker
+                class="sm-w-full"
+                v-model="date"
+                inline
+                showWeek
+            />
         </aside>
-        <main class="sm-flex sm-flex-1 sm-bg-light-background sm-p-16">
+        <main class="sm-flex sm-flex-col sm-gap-12 sm-flex-1 sm-bg-light-background sm-w-full sm-p-16">
             <calendar-view-header></calendar-view-header>
+            <calendar-view-grid-week></calendar-view-grid-week>
         </main>
     </div>
 </template>
@@ -28,8 +39,8 @@ import pButton from 'primevue/button';
 }
 
 .side-menu {
-    width: 250px;
-    max-width: 250px;
+    width: 350px;
+    max-width: 350px;
     background: rgba(255, 255, 255, 0.23);
     backdrop-filter: blur(5px) opacity(0.1);
 }
