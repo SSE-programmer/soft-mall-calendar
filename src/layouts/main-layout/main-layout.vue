@@ -18,7 +18,7 @@
         </nav>
     </header>
 
-    <div class="sm-p-12 sm-flex sm-flex-col sm-flex-1">
+    <div class="container sm-p-12 sm-flex sm-flex-col sm-flex-1 sm-bg-primary-background">
         <RouterView/>
     </div>
 </template>
@@ -33,6 +33,10 @@ import { RouterLink, RouterView } from 'vue-router';
 <style
     scoped
 >
+.container {
+    background: linear-gradient(to right, var(--sm-primary-color), var(--sm-accent-color), var(--sm-ultra-light-primary-color));
+}
+
 .link.router-link-active {
     color: #ffffff;
     text-decoration: underline;
