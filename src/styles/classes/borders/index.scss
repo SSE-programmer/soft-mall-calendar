@@ -3,6 +3,46 @@ $border-radii: 4, 6, 8, 10, 12, 16, 20, 24, 30;
 :root {
     @each $border-radius in $border-radii {
         --sm-border-radius-#{$border-radius}: #{$border-radius}px;
+
+        .sm-border-radius-#{$border-radius} {
+            border-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-t-#{$border-radius} {
+            border-top-left-radius: var(--sm-border-radius-#{$border-radius});
+            border-top-right-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-tl-#{$border-radius} {
+            border-top-left-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-tr-#{$border-radius} {
+            border-top-right-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-r-#{$border-radius} {
+            border-top-right-radius: var(--sm-border-radius-#{$border-radius});
+            border-bottom-right-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-b-#{$border-radius} {
+            border-bottom-left-radius: var(--sm-border-radius-#{$border-radius});
+            border-bottom-right-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-bl-#{$border-radius} {
+            border-bottom-left-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-br-#{$border-radius} {
+            border-bottom-right-radius: var(--sm-border-radius-#{$border-radius});
+        }
+
+        .sm-border-radius-l-#{$border-radius} {
+            border-top-left-radius: var(--sm-border-radius-#{$border-radius});
+            border-bottom-left-radius: var(--sm-border-radius-#{$border-radius});
+        }
     }
 }
 
