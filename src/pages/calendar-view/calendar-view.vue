@@ -3,17 +3,17 @@
     lang="ts"
 >
 import CalendarViewHeader from '@/pages/calendar-view/components/calendar-view-header/calendar-view-header.vue';
+import pButton from 'primevue/button';
 </script>
 
 <template>
     <div class="calendar-container sm-flex sm-flex sm-flex-1 sm-border-radius-16 sm-overflow-hidden">
         <aside class="side-menu sm-flex sm-flex-col sm-gap-12 sm-p-16">
-            <button
+            <p-button
                 class="sm-w-full"
-                role="button"
             >
                 + Создать событие
-            </button>
+            </p-button>
             Calendar
         </aside>
         <main class="sm-flex sm-flex-1 sm-bg-light-background sm-p-16">
