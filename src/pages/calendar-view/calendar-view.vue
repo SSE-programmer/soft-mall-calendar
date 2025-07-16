@@ -7,16 +7,25 @@ import pButton from 'primevue/button';
 import pDatePicker from 'primevue/datepicker';
 import CalendarViewGridWeek from '@/pages/calendar-view/components/calendar-view-week-grid/calendar-view-grid-week.vue';
 import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar.ts';
+import { useCalendarStore } from '@/stores/calendar/calendar.ts';
+import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
+import EditCalendarEventDialog
+    from '@/pages/calendar-view/components/edit-calendar-event-dialog/edit-calendar-event-dialog.vue';
 
 const { selectedDate } = storeToRefs(useCalendarStore());
+const { openDialog } = useCalendarEventDialogStore();
+
+function createCalendarEvent() {
+    openDialog();
+}
 </script>
 
 <template>
-    <div class="calendar-container sm-flex sm-flex sm-flex-1 sm-border-radius-16 sm-overflow-hidden">
+    <div class="calendar-container sm-flex sm-flex sm-flex-1 sm-border-radius-16 sm-overflow-x-auto">
         <aside class="side-menu sm-flex sm-flex-col sm-gap-12 sm-p-16">
             <p-button
                 class="sm-w-full"
+                @click="createCalendarEvent"
             >
                 + Create event
             </p-button>
@@ -32,6 +41,8 @@ const { selectedDate } = storeToRefs(useCalendarStore());
             <calendar-view-grid-week></calendar-view-grid-week>
         </main>
     </div>
+
+    <edit-calendar-event-dialog></edit-calendar-event-dialog>
 </template>
 
 <style scoped>

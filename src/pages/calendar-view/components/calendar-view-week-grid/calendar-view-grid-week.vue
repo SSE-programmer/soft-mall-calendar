@@ -3,7 +3,7 @@
     lang="ts"
 >
 import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar.ts';
+import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 import { computed } from 'vue';
 import { addDays, startOfWeek, } from 'date-fns';
 import { WEEK_LENGTH, WEEK_START } from '@/shared/constants/calendar.ts';

@@ -7,7 +7,7 @@ import pButtonGroup from 'primevue/buttongroup';
 import pButton from 'primevue/button';
 import pSelect from 'primevue/select';
 
-import { useCalendarStore } from '@/stores/calendar.ts';
+import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 import { storeToRefs } from 'pinia';
 import {
     DaySwitchStrategy,

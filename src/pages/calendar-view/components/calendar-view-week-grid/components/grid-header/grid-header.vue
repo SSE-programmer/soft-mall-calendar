@@ -8,7 +8,7 @@ import DayAndDate
     from '@/pages/calendar-view/components/calendar-view-week-grid/components/grid-header/day-and-date/day-and-date.vue';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar.ts';
+import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 
 interface Props {
     days: Date[];
