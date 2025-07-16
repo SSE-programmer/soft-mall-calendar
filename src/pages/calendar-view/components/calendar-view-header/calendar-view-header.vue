@@ -9,8 +9,28 @@ import pSelect from 'primevue/select';
 
 import { useCalendarStore } from '@/stores/calendar.ts';
 import { storeToRefs } from 'pinia';
+import {
+    DaySwitchStrategy,
+    type ISwitchStrategy, MonthSwitchStrategy,
+    WeekSwitchStrategy, YearSwitchStrategy
+} from '@/pages/calendar-view/components/calendar-view-header/switch-strategies.ts';
+import type { ViewModeCode } from '@/pages/calendar-view/models/ViewModeCode.ts';
 
 const { selectedDate, viewModeCode, viewModeList } = storeToRefs(useCalendarStore());
+const switchStrategyByViewMode: Record<ViewModeCode, ISwitchStrategy> = {
+    DAY: new DaySwitchStrategy(),
+    WEEK: new WeekSwitchStrategy(),
+    MONTH: new MonthSwitchStrategy(),
+    YEAR: new YearSwitchStrategy()
+}
+
+function previousCalendarPage() {
+    selectedDate.value = switchStrategyByViewMode[viewModeCode.value].previous(selectedDate.value);
+}
+
+function nextCalendarPage() {
+    selectedDate.value = switchStrategyByViewMode[viewModeCode.value].next(selectedDate.value);
+}
 </script>
 
 <template>
@@ -19,8 +39,8 @@ const { selectedDate, viewModeCode, viewModeList } = storeToRefs(useCalendarStor
 
         <div class="sm-flex sm-gap-8 sm-items-center">
             <p-button-group class="sm-font-bold">
-                <p-button><</p-button>
-                <p-button>></p-button>
+                <p-button @click="previousCalendarPage"><</p-button>
+                <p-button @click="nextCalendarPage">></p-button>
             </p-button-group>
 
             <p-select
