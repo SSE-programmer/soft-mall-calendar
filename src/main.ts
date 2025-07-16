@@ -15,6 +15,9 @@ app.use(pinia);
 app.use(PrimeVue, {
     theme: {
         preset: Aura
+    },
+    locale: {
+        dateFormat: 'dd.mm.yy'
     }
 });
 
