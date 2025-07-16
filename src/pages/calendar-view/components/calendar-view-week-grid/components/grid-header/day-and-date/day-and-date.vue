@@ -35,7 +35,7 @@ const props = defineProps<Props>();
 }
 
 .is-today {
-    background: var(--sm-gray-middle-color);
+    background: var(--calendar-today-cell-background-color);
 }
 
 .is-weekend {

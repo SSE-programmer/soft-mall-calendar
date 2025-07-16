@@ -51,5 +51,6 @@ const { selectedDate } = storeToRefs(useCalendarStore());
 .calendar-container {
     --calendar-default-border: 1px solid var(--sm-gray-middle-color);
     --calendar-default-border-color: var(--sm-gray-middle-color);
+    --calendar-today-cell-background-color: var(--sm-gray-light-color);
 }
 </style>
