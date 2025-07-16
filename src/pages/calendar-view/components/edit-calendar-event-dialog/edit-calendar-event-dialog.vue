@@ -15,6 +15,8 @@ import pToggleSwitch from 'primevue/toggleswitch';
 import pDatePicker from 'primevue/datepicker';
 import pMessage from 'primevue/message';
 import { useFormValidation } from '@/shared/utils/form-validation.ts';
+import IconUpload from '@/shared/components/icons/icon-upload.vue';
+import IconDownload from '@/shared/components/icons/icon-download.vue';
 
 const calendarEventsStore = useCalendarEventsStore();
 const calendarEventDialogStore = useCalendarEventDialogStore();
@@ -83,10 +85,33 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
     <p-dialog
         v-model:visible="visible"
         modal
-        :header="isEditing ? 'Edit event' : 'New event'"
         :style="{ width: '500px' }"
         maximizable
     >
+        <template #header>
+            <div class="sm-flex sm-gap-8 sm-flex-1 sm-items-center">
+                <span class="sm-text-20 sm-font-bold">{{ isEditing ? 'Edit event' : 'New event' }}</span>
+
+                <div class="sm-flex sm-flex-1 sm-items-center">
+                    <p-button
+                        severity="secondary"
+                        text
+                        v-tooltip.bottom="'Uploading from JSON'"
+                    >
+                        <icon-upload class="json-load-icon"></icon-upload>
+                    </p-button>
+
+                    <p-button
+                        severity="secondary"
+                        text
+                        v-tooltip.bottom="'Download as JSON'"
+                    >
+                        <icon-download class="json-load-icon"></icon-download>
+                    </p-button>
+                </div>
+            </div>
+        </template>
+
         <form
             class="sm-flex sm-flex-col sm-gap-24"
             name="calendar-event-form"
@@ -186,5 +211,9 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
 <style scoped>
 .time-picker {
     width: 5em;
+}
+
+.json-load-icon {
+    width: 20px;
 }
 </style>

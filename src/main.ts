@@ -4,6 +4,7 @@ import { createApp } from 'vue';
 import App from './app.vue';
 import router from './pages/router.ts';
 import PrimeVue from 'primevue/config';
+import Tooltip from 'primevue/tooltip';
 import Aura from '@primeuix/themes/aura';
 import { createPinia, type Store } from 'pinia';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
@@ -24,6 +25,8 @@ app.use(PrimeVue, {
 
 app.mount('#app');
 app.onUnmount(() => clearSubscriptions());
+
+app.directive('tooltip', Tooltip);
 
 const calendarEventsStore = useCalendarEventsStore();
 const piniaSubscriptions: (() => void)[] = [];
