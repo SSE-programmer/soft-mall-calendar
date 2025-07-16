@@ -62,9 +62,7 @@ const submitForm = async () => {
         return;
     }
 
-    if (isEditing.value) {
-    } else {
-    }
+    calendarEventsStore.save({ ...formData });
 
     closeDialog();
 };

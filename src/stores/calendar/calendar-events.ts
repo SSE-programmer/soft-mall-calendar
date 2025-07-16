@@ -1,7 +1,22 @@
 import { defineStore } from 'pinia';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
+import { ref } from 'vue';
 
-export const useCalendarEventsStore = defineStore('calendar-events', () => {
+export const ID = 'calendar-events';
+
+export const useCalendarEventsStore = defineStore(ID, () => {
+    const calendarEvents = ref<ICalendarEvent[]>([]);
+    const stateFromLocalStorage = localStorage.getItem(ID);
+
+    if (stateFromLocalStorage) {
+        const parsed = JSON.parse(stateFromLocalStorage);
+
+        if (parsed.calendarEvents) {
+            calendarEvents.value = parsed.calendarEvents;
+        }
+    }
+
+
     function getDefaultCalendarEvent(): ICalendarEvent {
         return {
             name: '',
@@ -14,7 +29,26 @@ export const useCalendarEventsStore = defineStore('calendar-events', () => {
         };
     }
 
+    function save(event: ICalendarEvent) {
+        let id = event.id;
+
+        if (!id) {
+            id = new Date().getTime();
+            event.id = id;
+        }
+
+        const eventByIdIndex = calendarEvents.value.findIndex(item => item.id === id);
+
+        if (eventByIdIndex !== -1) {
+            calendarEvents.value.splice(eventByIdIndex, 1, event);
+        } else {
+            calendarEvents.value.push(event);
+        }
+    }
+
     return {
-        getDefaultCalendarEvent
+        calendarEvents,
+        getDefaultCalendarEvent,
+        save
     };
 });

@@ -5,7 +5,8 @@ import App from './app.vue';
 import router from './pages/router.ts';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
-import { createPinia } from 'pinia';
+import { createPinia, type Store } from 'pinia';
+import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -22,3 +23,21 @@ app.use(PrimeVue, {
 });
 
 app.mount('#app');
+app.onUnmount(() => clearSubscriptions());
+
+const calendarEventsStore = useCalendarEventsStore();
+const piniaSubscriptions: (() => void)[] = [];
+
+savePiniaStoreToLocalStorage(calendarEventsStore);
+
+function savePiniaStoreToLocalStorage(store: Store) {
+    const subscription = store.$subscribe((_, state) => {
+        localStorage.setItem(store.$id, JSON.stringify(state));
+    }, { detached: true });
+
+    piniaSubscriptions.push(subscription);
+}
+
+function clearSubscriptions() {
+    piniaSubscriptions.forEach(subscription => subscription());
+}
