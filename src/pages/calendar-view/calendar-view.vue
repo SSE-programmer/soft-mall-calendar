@@ -18,7 +18,7 @@ const { selectedDate } = storeToRefs(useCalendarStore());
             <p-button
                 class="sm-w-full"
             >
-                + Создать событие
+                + Create event
             </p-button>
             <p-date-picker
                 class="sm-w-full"
