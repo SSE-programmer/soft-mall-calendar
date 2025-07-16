@@ -3,12 +3,13 @@
     lang="ts"
 >
 import CalendarViewHeader from '@/pages/calendar-view/components/calendar-view-header/calendar-view-header.vue';
-import { ref } from 'vue';
 import pButton from 'primevue/button';
 import pDatePicker from 'primevue/datepicker';
 import CalendarViewGridWeek from '@/pages/calendar-view/components/calendar-view-grid/calendar-view-grid-week.vue';
+import { storeToRefs } from 'pinia';
+import { useCalendarStore } from '@/stores/calendar.ts';
 
-const date = ref();
+const { selectedDate } = storeToRefs(useCalendarStore());
 </script>
 
 <template>
@@ -21,7 +22,7 @@ const date = ref();
             </p-button>
             <p-date-picker
                 class="sm-w-full"
-                v-model="date"
+                v-model="selectedDate"
                 inline
                 showWeek
             />
