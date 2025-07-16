@@ -3,7 +3,7 @@
     lang="ts"
 >
 import { reactive, ref } from 'vue';
-import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
+import { type ICalendarEvent, isCalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
 import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
 import { z } from 'zod';
@@ -14,12 +14,14 @@ import pButton from 'primevue/button';
 import pToggleSwitch from 'primevue/toggleswitch';
 import pDatePicker from 'primevue/datepicker';
 import pMessage from 'primevue/message';
-import { useFormValidation } from '@/shared/utils/form-validation.ts';
+import { downloadJSON, useFormValidation } from '@/shared/utils';
 import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
 
 const calendarEventsStore = useCalendarEventsStore();
 const calendarEventDialogStore = useCalendarEventDialogStore();
+
+const JSON_FILE_PREFIX = 'calendar-event_';
 
 const { getDefaultCalendarEvent } = calendarEventsStore;
 const visible = ref(false);
@@ -79,6 +81,62 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
             break;
     }
 });
+
+const fileInput = ref<HTMLInputElement>();
+const uploadDataFromJSON = () => {
+    fileInput.value?.click();
+};
+
+const handleFileUpload = async (event: Event) => {
+    if (!event.target) {
+        return;
+    }
+
+    const file = (event.target as HTMLInputElement).files[0];
+
+    if (!file) return;
+
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+    if (file.size > MAX_SIZE) {
+        console.error('Max file size: 5MB');
+        // TODO Toastr about error
+
+        return;
+    }
+
+    if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+        console.error('Only json file types are allowed!');
+        // TODO Toastr about error
+
+        return;
+    }
+
+    try {
+        const content = await readFileAsText(file) as string;
+        const result = JSON.parse(content);
+
+        if (isCalendarEvent(result)) {
+            Object.assign(formData, defaultCalendarEvent, result);
+        } else {
+            console.error('Data from JSON isn`t Calendar Event');
+        }
+    } catch (err) {
+        console.error('File reading error', err);
+        // TODO Toastr about error
+    }
+};
+
+const readFileAsText = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => resolve(event.target.result);
+        reader.onerror = (error) => reject(error);
+
+        reader.readAsText(file);
+    });
+};
 </script>
 
 <template>
@@ -89,6 +147,14 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
         maximizable
     >
         <template #header>
+            <input
+                style="display: none"
+                type="file"
+                accept=".json"
+                @change="handleFileUpload"
+                ref="fileInput"
+            >
+
             <div class="sm-flex sm-gap-8 sm-flex-1 sm-items-center">
                 <span class="sm-text-20 sm-font-bold">{{ isEditing ? 'Edit event' : 'New event' }}</span>
 
@@ -97,6 +163,7 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
                         severity="secondary"
                         text
                         v-tooltip.bottom="'Uploading from JSON'"
+                        @click="uploadDataFromJSON"
                     >
                         <icon-upload class="json-load-icon"></icon-upload>
                     </p-button>
@@ -105,6 +172,7 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
                         severity="secondary"
                         text
                         v-tooltip.bottom="'Download as JSON'"
+                        @click="downloadJSON(formData, `${JSON_FILE_PREFIX}${formData.id || new Date().getTime()}`)"
                     >
                         <icon-download class="json-load-icon"></icon-download>
                     </p-button>
