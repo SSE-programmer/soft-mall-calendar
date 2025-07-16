@@ -4,11 +4,14 @@
 >
 import { WEEK_LENGTH, WEEK_VIEW_SIDE_COLUMN_WIDTH } from '@/shared/constants/calendar.ts';
 import { getWeek, isToday } from 'date-fns';
+import { storeToRefs } from 'pinia';
+import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 
 interface Props {
     days: Date[];
 }
 
+const { selectedDate } = storeToRefs(useCalendarStore());
 const props = defineProps<Props>();
 </script>
 
@@ -27,7 +30,7 @@ const props = defineProps<Props>();
                 'max-width': WEEK_VIEW_SIDE_COLUMN_WIDTH
             }"
         >
-            {{ getWeek(new Date()) }} week
+            {{ getWeek(selectedDate) }} week
         </div>
         <div
             v-for="day in days"
@@ -36,8 +39,7 @@ const props = defineProps<Props>();
             :class="{
                 'is-today': isToday(day)
             }"
-        >
-        </div>
+        ></div>
     </div>
 </template>
 
