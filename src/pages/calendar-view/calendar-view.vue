@@ -5,7 +5,7 @@
 import CalendarViewHeader from '@/pages/calendar-view/components/calendar-view-header/calendar-view-header.vue';
 import pButton from 'primevue/button';
 import pDatePicker from 'primevue/datepicker';
-import CalendarViewGridWeek from '@/pages/calendar-view/components/calendar-view-grid/calendar-view-grid-week.vue';
+import CalendarViewGridWeek from '@/pages/calendar-view/components/calendar-view-week-grid/calendar-view-grid-week.vue';
 import { storeToRefs } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar.ts';
 
@@ -44,5 +44,12 @@ const { selectedDate } = storeToRefs(useCalendarStore());
     max-width: 350px;
     background: rgba(255, 255, 255, 0.23);
     backdrop-filter: blur(5px) opacity(0.1);
+}
+</style>
+
+<style>
+.calendar-container {
+    --calendar-default-border: 1px solid var(--sm-gray-middle-color);
+    --calendar-default-border-color: var(--sm-gray-middle-color);
 }
 </style>

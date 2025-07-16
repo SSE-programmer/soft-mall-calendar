@@ -18,13 +18,13 @@ const props = defineProps<Props>();
     <div
         class="date sm-flex sm-gap-8 sm-items-center sm-justify-center sm-p-8 sm-border-radius-16"
         :class="{
-            'is-today': props.isToday,
-            'is-other-month': props.isOtherMonth,
-            'is-weekend': props.isWeekend,
+            'is-today': isToday,
+            'is-other-month': isOtherMonth,
+            'is-weekend': isWeekend,
         }"
     >
-        <span class="sm-font-bold">{{ formatDate(props.date, 'EEEEEE') }}</span>
-        <span>{{ formatDate(props.date, 'd') }}</span>
+        <span class="sm-font-bold">{{ formatDate(date, 'EEEEEE') }}</span>
+        <span>{{ formatDate(date, 'd') }}</span>
     </div>
 </template>
 
