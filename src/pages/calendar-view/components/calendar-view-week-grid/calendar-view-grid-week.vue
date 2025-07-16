@@ -20,7 +20,7 @@ const days = computed<Date[]>(() => {
 </script>
 
 <template>
-    <div class="sm-flex sm-flex-col">
+    <div class="sm-flex sm-flex-col sm-max-h-full">
         <grid-header class="sm-mb-8" :days="days"></grid-header>
         <full-day-events-row :days="days"></full-day-events-row>
     </div>
