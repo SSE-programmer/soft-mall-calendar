@@ -6,12 +6,15 @@ import { reactive, ref } from 'vue';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
 import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
+import { z } from 'zod';
 import pDialog from 'primevue/dialog';
 import pInputText from 'primevue/inputtext';
 import pTextarea from 'primevue/textarea';
 import pButton from 'primevue/button';
 import pToggleSwitch from 'primevue/toggleswitch';
 import pDatePicker from 'primevue/datepicker';
+import pMessage from 'primevue/message';
+import { useFormValidation } from '@/shared/utils/form-validation.ts';
 
 const calendarEventsStore = useCalendarEventsStore();
 const calendarEventDialogStore = useCalendarEventDialogStore();
@@ -20,7 +23,16 @@ const { getDefaultCalendarEvent } = calendarEventsStore;
 const visible = ref(false);
 const isEditing = ref(false);
 const defaultCalendarEvent = getDefaultCalendarEvent();
-const formData = reactive<ICalendarEvent>(defaultCalendarEvent);
+const formSchema = z.object({
+    name: z.string().nonempty('Name required'),
+    description: z.string(),
+    dateStart: z.date(),
+    dateEnd: z.date(),
+    timeStart: z.date().optional(),
+    timeEnd: z.date().optional()
+});
+const formData = reactive<ICalendarEvent>({ ...defaultCalendarEvent });
+const { errors, validate, reset } = useFormValidation(formSchema, formData);
 
 const openDialog = (item?: ICalendarEvent) => {
     if (item) {
@@ -35,19 +47,26 @@ const openDialog = (item?: ICalendarEvent) => {
 
 const closeDialog = () => {
     visible.value = false;
+    resetForm();
 };
 
 const resetForm = () => {
     Object.assign(formData, defaultCalendarEvent);
+    reset();
 };
 
-const submitForm = () => {
+const submitForm = async () => {
+    const isValid = await validate();
+
+    if (!isValid) {
+        return;
+    }
+
     if (isEditing.value) {
     } else {
     }
 
     closeDialog();
-    resetForm();
 };
 
 calendarEventDialogStore.$onAction(({ name, args }) => {
@@ -81,7 +100,14 @@ calendarEventDialogStore.$onAction(({ name, args }) => {
                     v-model="formData.name"
                     :required="true"
                     :minlength="1"
+                    :invalid="!!errors['name']"
                 />
+                <p-message
+                    v-if="errors['name']"
+                    severity="error"
+                >
+                    {{ errors['name'] }}
+                </p-message>
             </div>
 
             <div class="sm-flex sm-flex-col sm-gap-4">
