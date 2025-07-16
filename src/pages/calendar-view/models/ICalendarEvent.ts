@@ -1,9 +1,10 @@
 export interface ICalendarEvent {
+    id?: number
     name: string;
     description: string;
     fullDay: boolean;
-    dateStart: number;
-    dateEnd: number;
-    timeStart?: number | null;
-    timeEnd?: number | null;
+    dateStart: Date;
+    dateEnd: Date;
+    timeStart?: Date | null;
+    timeEnd?: Date | null;
 }
