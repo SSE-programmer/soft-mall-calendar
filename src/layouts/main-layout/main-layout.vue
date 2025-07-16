@@ -1,5 +1,5 @@
 <template>
-    <div class="layout sm-flex sm-flex-col">
+    <div class="layout sm-flex sm-flex-col sm-flex-1">
         <header class="sm-flex sm-gap-12 sm-items-center sm-justify-between sm-p-12 sm-bg-middle-background">
             <h1 class="sm-light-accent-color">Soft Mall - Calendar</h1>
 

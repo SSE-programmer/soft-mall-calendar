@@ -16,7 +16,6 @@ export const useCalendarEventsStore = defineStore(ID, () => {
         }
     }
 
-
     function getDefaultCalendarEvent(): ICalendarEvent {
         return {
             name: '',
