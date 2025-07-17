@@ -1,5 +1,5 @@
 export interface ICalendarEvent {
-    id?: number
+    id?: number;
     name: string;
     description: string;
     fullDay: boolean;
@@ -7,6 +7,8 @@ export interface ICalendarEvent {
     dateEnd: Date;
     timeStart?: Date | null;
     timeEnd?: Date | null;
+    calculatedStart: Date;
+    calculatedEnd: Date;
 }
 
 export function isCalendarEvent(value: unknown): value is ICalendarEvent {

@@ -27,7 +27,9 @@ export const useCalendarEventsStore = defineStore(ID, () => {
             dateStart: new Date(),
             dateEnd: new Date(),
             timeStart: new Date(),
-            timeEnd: new Date()
+            timeEnd: new Date(),
+            calculatedStart: new Date(),
+            calculatedEnd: new Date()
         };
     }
 
@@ -39,12 +41,13 @@ export const useCalendarEventsStore = defineStore(ID, () => {
             event.id = id;
         }
 
-        const eventByIdIndex = calendarEvents.value.findIndex(item => item.id === id);
+        const events = calendarEvents.value;
+        const eventByIdIndex = events.findIndex(item => item.id === id);
 
         if (eventByIdIndex !== -1) {
-            calendarEvents.value.splice(eventByIdIndex, 1, event);
+            events.splice(eventByIdIndex, 1, event);
         } else {
-            calendarEvents.value.push(event);
+            events.push(event);
         }
     }
 
@@ -90,10 +93,7 @@ export const useCalendarEventsStore = defineStore(ID, () => {
             const filterStart = getCalendarEventStart(filters as CalendarEventRangeUnit<'dateStart'>);
 
             result = result.filter((event) => {
-                const eventStart = getCalendarEventStart(event);
-                const eventEnd = getCalendarEventEnd(event);
-
-                return eventStart >= filterStart || eventEnd >= filterStart;
+                return event.calculatedStart >= filterStart || event.calculatedEnd >= filterStart;
             });
         }
 
@@ -101,10 +101,8 @@ export const useCalendarEventsStore = defineStore(ID, () => {
             const filterEnd = getCalendarEventEnd(filters as CalendarEventRangeUnit<'dateEnd'>);
 
             result = result.filter((event) => {
-                const eventStart = getCalendarEventStart(event);
-                const eventEnd = getCalendarEventEnd(event);
 
-                return eventStart <= filterEnd || eventEnd <= filterEnd;
+                return event.calculatedStart <= filterEnd || event.calculatedEnd <= filterEnd;
             });
         }
 

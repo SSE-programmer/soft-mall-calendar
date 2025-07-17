@@ -21,6 +21,7 @@ import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
 import { combineDateAndTime } from '@/shared/utils/combine-date-and-time.ts';
 import IconTrash from '@/shared/components/icons/icon-trash.vue';
+import { getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils';
 
 const JSON_FILE_PREFIX = 'calendar-event_';
 
@@ -40,6 +41,10 @@ const formSchema = z.object({
 });
 const formData = reactive<ICalendarEvent>({ ...defaultCalendarEvent });
 const { errors, validate, reset } = useFormValidation(formSchema, formData);
+const actualCalculatedDates: Pick<ICalendarEvent, 'calculatedStart' | 'calculatedEnd'> = {
+    calculatedStart: new Date(),
+    calculatedEnd: new Date()
+};
 
 watch(formData, () => {
     const start = formData.timeStart ? combineDateAndTime(formData.dateStart, formData.timeStart) : formData.dateStart;
@@ -51,6 +56,16 @@ watch(formData, () => {
             formData.timeEnd = formData.timeStart;
         });
     }
+
+    actualCalculatedDates.calculatedStart = getCalendarEventStart({
+        ...formData,
+        timeStart: formData.fullDay ? undefined : formData.timeStart,
+    });
+
+    actualCalculatedDates.calculatedEnd = getCalendarEventEnd({
+        ...formData,
+        timeEnd: formData.fullDay ? undefined : formData.timeEnd
+    });
 });
 
 const openDialog = (item?: ICalendarEvent) => {
@@ -87,6 +102,8 @@ const submitForm = async () => {
         ...formData,
         timeStart: formData.fullDay ? undefined : formData.timeStart,
         timeEnd: formData.fullDay ? undefined : formData.timeEnd,
+        calculatedStart: actualCalculatedDates.calculatedStart,
+        calculatedEnd: actualCalculatedDates.calculatedEnd
     });
     toast.success(isEditing.value ? 'Calendar event updated' : 'Calendar event created');
 
@@ -99,7 +116,7 @@ const removeEvent = (id: number) => {
     }
 
     closeDialog();
-}
+};
 
 const calendarEventDialogStore = useCalendarEventDialogStore();
 calendarEventDialogStore.$onAction(({ name, args }) => {

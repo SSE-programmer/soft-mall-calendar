@@ -15,7 +15,6 @@ import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
 import { computed, ref, toRefs, watch } from 'vue';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
-import { getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils';
 import { useElementSize } from '@/shared/utils/use-element-size.ts';
 import FullDayEvent, {
     type IPreparedCalendarEvent
@@ -37,13 +36,8 @@ const lastDay = computed(() => days.value[days.value.length - 1]);
 
 const events = ref<ICalendarEvent[]>([]);
 const sortedEvents = computed(() => events.value.sort((a, b) => {
-    const aStart = getCalendarEventStart(a);
-    const aEnd = getCalendarEventEnd(a);
-    const aDuration = aEnd.getTime() - aStart.getTime();
-
-    const bStart = getCalendarEventStart(b);
-    const bEnd = getCalendarEventEnd(b);
-    const bDuration = bEnd.getTime() - bStart.getTime();
+    const aDuration = a.calculatedEnd.getTime() - a.calculatedStart.getTime();
+    const bDuration = b.calculatedEnd.getTime() - b.calculatedStart.getTime();
 
     return aDuration - bDuration;
 }));
@@ -86,15 +80,15 @@ const eventsGrid = computed(() => {
     return result;
 
     function getPreparedEvent(event: ICalendarEvent): IPreparedCalendarEvent {
-        let eventStart = getCalendarEventStart(event);
-        let eventEnd = getCalendarEventEnd(event);
+        let eventStart = event.calculatedStart;
+        let eventEnd = event.calculatedEnd;
 
         let truncatedBeginning = false;
         let truncatedEnd = false;
 
         if (isBefore(eventStart, firstDay.value)) {
             eventStart = firstDay.value;
-            truncatedBeginning= true;
+            truncatedBeginning = true;
         }
 
         if (isAfter(eventEnd, lastDay.value)) {
@@ -148,7 +142,7 @@ const { width: cellWidth } = useElementSize(cellElement, 50);
 const { openDialog } = useCalendarEventDialogStore();
 
 function editEvent(event: ICalendarEvent) {
-    openDialog(event)
+    openDialog(event);
 }
 </script>
 
