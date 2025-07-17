@@ -36,7 +36,7 @@ const props = defineProps<Props>();
             width: `${cellWidth * (event.endColumn - event.startColumn) - parseInt(WEEK_VIEW_CELL_PADDING)}px`,
             height: WEEK_VIEW_FULL_DATE_EVENT_HEIGH,
         }"
-        v-tooltip.bottom="`-- ${format(event.dateStart, 'dd.mm.yy')} --\n${event.name}\n${event.description ? '[' + event.description + ']' : ''}`"
+        v-tooltip.bottom="`${format(event.dateStart, 'dd.mm.yy')} - ${format(event.dateEnd, 'dd.mm.yy')}\n${event.name}\n${event.description ? '[' + event.description + ']' : ''}`"
     >
         <span
             v-if="event.truncatedBeginning"
