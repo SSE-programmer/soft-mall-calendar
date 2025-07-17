@@ -14,7 +14,7 @@ import pButton from 'primevue/button';
 import pToggleSwitch from 'primevue/toggleswitch';
 import pDatePicker from 'primevue/datepicker';
 import pMessage from 'primevue/message';
-import { downloadJSON, useFormValidation } from '@/shared/utils';
+import { downloadJSON, reviver, useFormValidation } from '@/shared/utils';
 import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
 
@@ -92,7 +92,8 @@ const handleFileUpload = async (event: Event) => {
         return;
     }
 
-    const file = (event.target as HTMLInputElement).files[0];
+    const target = event.target as HTMLInputElement;
+    const file = target.files && target.files[0];
 
     if (!file) return;
 
@@ -114,7 +115,7 @@ const handleFileUpload = async (event: Event) => {
 
     try {
         const content = await readFileAsText(file) as string;
-        const result = JSON.parse(content);
+        const result = JSON.parse(content, reviver);
 
         if (isCalendarEvent(result)) {
             Object.assign(formData, defaultCalendarEvent, result);
@@ -127,11 +128,11 @@ const handleFileUpload = async (event: Event) => {
     }
 };
 
-const readFileAsText = (file) => {
+const readFileAsText = (file: File) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.onload = (event) => resolve(event.target.result);
+        reader.onload = (event) => resolve(event.target?.result);
         reader.onerror = (error) => reject(error);
 
         reader.readAsText(file);

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 import { ref } from 'vue';
+import { reviver } from '@/shared/utils';
 
 export const ID = 'calendar-events';
 
@@ -9,7 +10,7 @@ export const useCalendarEventsStore = defineStore(ID, () => {
     const stateFromLocalStorage = localStorage.getItem(ID);
 
     if (stateFromLocalStorage) {
-        const parsed = JSON.parse(stateFromLocalStorage);
+        const parsed = JSON.parse(stateFromLocalStorage, reviver);
 
         if (parsed.calendarEvents) {
             calendarEvents.value = parsed.calendarEvents;
