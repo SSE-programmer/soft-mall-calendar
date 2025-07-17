@@ -140,6 +140,18 @@ const { openDialog } = useCalendarEventDialogStore();
 function editEvent(event: ICalendarEvent) {
     openDialog(event);
 }
+
+function onDayCellClick(date: Date) {
+    const { getDefaultCalendarEvent } = calendarEventsStore;
+    const eventDraft = getDefaultCalendarEvent();
+
+    openDialog({
+        ...eventDraft,
+        dateStart: date,
+        dateEnd: date,
+        fullDay: true
+    });
+}
 </script>
 
 <template>
@@ -169,6 +181,7 @@ function editEvent(event: ICalendarEvent) {
             :class="{
                 'is-today': isToday(day)
             }"
+            @click="onDayCellClick(day)"
         ></div>
 
         <template
