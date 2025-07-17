@@ -2,11 +2,12 @@
     setup
     lang="ts"
 >
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { type ICalendarEvent, isCalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
 import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
 import { z } from 'zod';
+import { isAfter } from 'date-fns';
 import pDialog from 'primevue/dialog';
 import pInputText from 'primevue/inputtext';
 import pTextarea from 'primevue/textarea';
@@ -18,6 +19,7 @@ import { downloadJSON, reviver, useFormValidation } from '@/shared/utils';
 import { useToast } from 'vue-toastification';
 import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
+import { combineDateAndTime } from '@/shared/utils/combine-date-and-time.ts';
 
 const JSON_FILE_PREFIX = 'calendar-event_';
 
@@ -37,6 +39,18 @@ const formSchema = z.object({
 });
 const formData = reactive<ICalendarEvent>({ ...defaultCalendarEvent });
 const { errors, validate, reset } = useFormValidation(formSchema, formData);
+
+watch(formData, () => {
+    const start = formData.timeStart ? combineDateAndTime(formData.dateStart, formData.timeStart) : formData.dateStart;
+    const end = formData.timeEnd ? combineDateAndTime(formData.dateEnd, formData.timeEnd) : formData.dateEnd;
+
+    if (isAfter(start, end)) {
+        setTimeout(() => {
+            formData.dateEnd = formData.dateStart;
+            formData.timeEnd = formData.timeStart;
+        });
+    }
+});
 
 const openDialog = (item?: ICalendarEvent) => {
     if (item) {
@@ -258,6 +272,7 @@ const readFileAsText = (file: File) => {
                             class="sm-flex-1"
                             input-id="date-and-time"
                             v-model="formData.dateEnd"
+                            :min-date="formData.dateStart"
                         />
                         <p-date-picker
                             class="time-picker"
