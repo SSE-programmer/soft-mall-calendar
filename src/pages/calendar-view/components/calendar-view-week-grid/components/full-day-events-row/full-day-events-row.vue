@@ -15,7 +15,6 @@ import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
 import { computed, ref, toRefs, watch } from 'vue';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
-import { useElementSize } from '@/shared/utils/use-element-size.ts';
 import FullDayEvent, {
     type IPreparedCalendarEvent
 } from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-event/full-day-event.vue';
@@ -136,9 +135,6 @@ calendarEventsStore.$onAction(({ name, after }) => {
     });
 });
 
-const cellElement = ref<HTMLElement | null>(null);
-const { width: cellWidth } = useElementSize(cellElement, 50);
-
 const { openDialog } = useCalendarEventDialogStore();
 
 function editEvent(event: ICalendarEvent) {
@@ -173,7 +169,6 @@ function editEvent(event: ICalendarEvent) {
             :class="{
                 'is-today': isToday(day)
             }"
-            ref="cellElement"
         ></div>
 
         <template
@@ -184,7 +179,6 @@ function editEvent(event: ICalendarEvent) {
                 v-for="event in row"
                 :event="event"
                 :row-index="rowIndex"
-                :cell-width="cellWidth"
                 @click="editEvent(event)"
             ></full-day-event>
         </template>
@@ -198,7 +192,7 @@ function editEvent(event: ICalendarEvent) {
     border-top: var(--calendar-default-border);
     border-bottom: var(--calendar-default-border);
 
-    .cell:not(:last-child) {
+    .cell:not(:last-of-type) {
         border-right: var(--calendar-default-border);
     }
 
