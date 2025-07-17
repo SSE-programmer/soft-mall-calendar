@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 import { computed } from 'vue';
 import { addDays, startOfWeek, } from 'date-fns';
-import { WEEK_LENGTH, WEEK_START } from '@/shared/constants/calendar.ts';
+import { WEEK_LENGTH, WEEK_START } from '@/pages/calendar-view/constants/calendar.ts';
 import GridHeader from '@/pages/calendar-view/components/calendar-view-week-grid/components/grid-header/grid-header.vue';
 import FullDayEventsRow from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-events-row.vue';
 import TimelineRows

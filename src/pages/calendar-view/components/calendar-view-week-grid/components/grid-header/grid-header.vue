@@ -2,7 +2,7 @@
     setup
     lang="ts"
 >
-import { WEEK_VIEW_SIDE_COLUMN_WIDTH } from '@/shared/constants/calendar.ts';
+import { WEEK_VIEW_SIDE_COLUMN_WIDTH } from '@/pages/calendar-view/constants/calendar.ts';
 import { isSameMonth, isToday, isWeekend } from 'date-fns';
 import DayAndDate
     from '@/pages/calendar-view/components/calendar-view-week-grid/components/grid-header/day-and-date/day-and-date.vue';

@@ -7,7 +7,7 @@ import {
     WEEK_LENGTH,
     WEEK_VIEW_SIDE_COLUMN_WIDTH,
     WEEK_VIEW_TIMELINE_ROW_HEIGH
-} from '@/shared/constants/calendar.ts';
+} from '@/pages/calendar-view/constants/calendar.ts';
 import { isToday } from 'date-fns';
 
 interface Props {

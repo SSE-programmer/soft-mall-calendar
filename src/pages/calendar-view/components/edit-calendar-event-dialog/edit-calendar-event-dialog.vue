@@ -82,7 +82,11 @@ const submitForm = async () => {
         return;
     }
 
-    calendarEventsStore.save({ ...formData });
+    calendarEventsStore.save({
+        ...formData,
+        timeStart: formData.fullDay ? undefined : formData.timeStart,
+        timeEnd: formData.fullDay ? undefined : formData.timeEnd,
+    });
     toast.success('Calendar event created');
 
     closeDialog();
