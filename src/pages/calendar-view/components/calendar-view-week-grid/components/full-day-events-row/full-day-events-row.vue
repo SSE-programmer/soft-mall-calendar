@@ -89,12 +89,17 @@ const eventsGrid = computed(() => {
         let eventStart = getCalendarEventStart(event);
         let eventEnd = getCalendarEventEnd(event);
 
+        let truncatedBeginning = false;
+        let truncatedEnd = false;
+
         if (isBefore(eventStart, firstDay.value)) {
             eventStart = firstDay.value;
+            truncatedBeginning= true;
         }
 
         if (isAfter(eventEnd, lastDay.value)) {
             eventEnd = lastDay.value;
+            truncatedEnd = true;
         }
 
         const startDayIndex = days.value.findIndex(day => isSameDay(day, eventStart));
@@ -104,6 +109,8 @@ const eventsGrid = computed(() => {
             ...event,
             startColumn: startDayIndex,
             endColumn: endDayIndex + 1,
+            truncatedBeginning,
+            truncatedEnd,
         };
     }
 });
