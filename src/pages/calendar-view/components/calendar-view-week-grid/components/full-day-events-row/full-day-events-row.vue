@@ -128,6 +128,7 @@ calendarEventsStore.$onAction(({ name, after }) => {
     after(() => {
         switch (name) {
             case 'save':
+            case 'remove':
                 loadEvents();
                 break;
         }

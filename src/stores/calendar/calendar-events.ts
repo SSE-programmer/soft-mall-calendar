@@ -5,7 +5,6 @@ import { reviver } from '@/shared/utils';
 import { type CalendarEventRangeUnit, getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils';
 
 export const ID = 'calendar-events';
-
 export type CalendarEventsFilter = Partial<ICalendarEvent>;
 
 export const useCalendarEventsStore = defineStore(ID, () => {
@@ -47,6 +46,19 @@ export const useCalendarEventsStore = defineStore(ID, () => {
         } else {
             calendarEvents.value.push(event);
         }
+    }
+
+    function remove(id: number): boolean {
+        const events = calendarEvents.value;
+        const index = events.findIndex(item => item.id === id);
+
+        if (index !== -1) {
+            events.splice(index, 1);
+
+            return true;
+        }
+
+        return false;
     }
 
     function getEvents(filters?: CalendarEventsFilter) {
@@ -103,6 +115,7 @@ export const useCalendarEventsStore = defineStore(ID, () => {
         calendarEvents,
         getDefaultCalendarEvent,
         save,
+        remove,
         getEvents
     };
 });

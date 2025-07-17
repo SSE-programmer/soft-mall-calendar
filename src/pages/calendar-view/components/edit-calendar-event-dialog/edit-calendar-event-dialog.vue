@@ -20,6 +20,7 @@ import { useToast } from 'vue-toastification';
 import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
 import { combineDateAndTime } from '@/shared/utils/combine-date-and-time.ts';
+import IconTrash from '@/shared/components/icons/icon-trash.vue';
 
 const JSON_FILE_PREFIX = 'calendar-event_';
 
@@ -91,6 +92,14 @@ const submitForm = async () => {
 
     closeDialog();
 };
+
+const removeEvent = (id: number) => {
+    if (calendarEventsStore.remove(id)) {
+        toast.warning('Event removed');
+    }
+
+    closeDialog();
+}
 
 const calendarEventDialogStore = useCalendarEventDialogStore();
 calendarEventDialogStore.$onAction(({ name, args }) => {
@@ -197,7 +206,7 @@ const readFileAsText = (file: File) => {
                         v-tooltip.bottom="'Uploading from JSON'"
                         @click="uploadDataFromJSON"
                     >
-                        <icon-upload class="json-load-icon"></icon-upload>
+                        <icon-upload class="header-icon"></icon-upload>
                     </p-button>
 
                     <p-button
@@ -206,7 +215,17 @@ const readFileAsText = (file: File) => {
                         v-tooltip.bottom="'Download as JSON'"
                         @click="downloadJSON(formData, `${JSON_FILE_PREFIX}${formData.id || new Date().getTime()}`)"
                     >
-                        <icon-download class="json-load-icon"></icon-download>
+                        <icon-download class="header-icon"></icon-download>
+                    </p-button>
+
+                    <p-button
+                        v-if="formData.id"
+                        severity="secondary"
+                        text
+                        v-tooltip.bottom="'Remove event'"
+                        @click="removeEvent(formData.id)"
+                    >
+                        <icon-trash class="header-icon"></icon-trash>
                     </p-button>
                 </div>
             </div>
@@ -314,7 +333,7 @@ const readFileAsText = (file: File) => {
     width: 5em;
 }
 
-.json-load-icon {
+.header-icon {
     width: 20px;
 }
 </style>
