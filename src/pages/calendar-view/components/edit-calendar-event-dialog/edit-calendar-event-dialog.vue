@@ -15,14 +15,14 @@ import pToggleSwitch from 'primevue/toggleswitch';
 import pDatePicker from 'primevue/datepicker';
 import pMessage from 'primevue/message';
 import { downloadJSON, reviver, useFormValidation } from '@/shared/utils';
+import { useToast } from 'vue-toastification';
 import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
 
-const calendarEventsStore = useCalendarEventsStore();
-const calendarEventDialogStore = useCalendarEventDialogStore();
-
 const JSON_FILE_PREFIX = 'calendar-event_';
 
+const toast = useToast();
+const calendarEventsStore = useCalendarEventsStore();
 const { getDefaultCalendarEvent } = calendarEventsStore;
 const visible = ref(false);
 const isEditing = ref(false);
@@ -63,14 +63,18 @@ const submitForm = async () => {
     const isValid = await validate();
 
     if (!isValid) {
+        toast.error('Failed to create event - form is not valid');
+
         return;
     }
 
     calendarEventsStore.save({ ...formData });
+    toast.success('Calendar event created');
 
     closeDialog();
 };
 
+const calendarEventDialogStore = useCalendarEventDialogStore();
 calendarEventDialogStore.$onAction(({ name, args }) => {
     switch (name) {
         case 'openDialog':
@@ -100,15 +104,19 @@ const handleFileUpload = async (event: Event) => {
     const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
     if (file.size > MAX_SIZE) {
-        console.error('Max file size: 5MB');
-        // TODO Toastr about error
+        const message = 'Max file size: 5MB';
+
+        console.error(message);
+        toast.error(message);
 
         return;
     }
 
     if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-        console.error('Only json file types are allowed!');
-        // TODO Toastr about error
+        const message = 'Only json file types are allowed';
+
+        console.error(message);
+        toast.error(message);
 
         return;
     }
@@ -120,11 +128,16 @@ const handleFileUpload = async (event: Event) => {
         if (isCalendarEvent(result)) {
             Object.assign(formData, defaultCalendarEvent, result);
         } else {
-            console.error('Data from JSON isn`t Calendar Event');
+            const message = 'Data from JSON isn`t Calendar Event';
+
+            console.error(message);
+            toast.error(message);
         }
     } catch (err) {
-        console.error('File reading error', err);
-        // TODO Toastr about error
+        const message = 'File reading error';
+
+        console.error(message, err);
+        toast.error(message);
     }
 };
 
