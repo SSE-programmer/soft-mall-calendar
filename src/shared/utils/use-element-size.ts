@@ -42,7 +42,7 @@ export function useElementSize(elementRef: Ref<HTMLElement | null>, debounceTime
             if (newVal) {
                 connect();
             }
-        }, { immediate: true });
+        }, { immediate: true, deep: true });
     });
 
     onUnmounted(() => {

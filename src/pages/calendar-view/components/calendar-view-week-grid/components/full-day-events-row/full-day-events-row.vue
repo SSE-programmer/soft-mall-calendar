@@ -3,11 +3,13 @@
     lang="ts"
 >
 import {
-    WEEK_LENGTH, WEEK_VIEW_FULL_DATE_EVENT_GAP,
+    WEEK_LENGTH,
+    WEEK_VIEW_CELL_PADDING,
+    WEEK_VIEW_FULL_DATE_EVENT_GAP,
     WEEK_VIEW_FULL_DATE_EVENT_HEIGH,
     WEEK_VIEW_SIDE_COLUMN_WIDTH
 } from '@/pages/calendar-view/constants/calendar.ts';
-import { getWeek, isToday, isBefore, isAfter, isSameDay } from 'date-fns';
+import { getWeek, isAfter, isBefore, isSameDay, isToday } from 'date-fns';
 import { storeToRefs } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar/calendar.ts';
 import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
@@ -15,11 +17,10 @@ import { computed, ref, toRefs, watch } from 'vue';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 import { getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils';
 import { useElementSize } from '@/shared/utils/use-element-size.ts';
-
-interface IPreparedCalendarEvent extends ICalendarEvent {
-    startColumn: number;
-    endColumn: number;
-}
+import FullDayEvent, {
+    type IPreparedCalendarEvent
+} from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-event/full-day-event.vue';
+import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
 
 interface Props {
     days: Date[];
@@ -28,7 +29,8 @@ interface Props {
 const props = defineProps<Props>();
 const { days } = toRefs(props);
 const { selectedDate } = storeToRefs(useCalendarStore());
-const { getEvents } = useCalendarEventsStore();
+const calendarEventsStore = useCalendarEventsStore();
+const { getEvents } = calendarEventsStore;
 
 const firstDay = computed(() => days.value[0]);
 const lastDay = computed(() => days.value[days.value.length - 1]);
@@ -98,13 +100,11 @@ const eventsGrid = computed(() => {
         const startDayIndex = days.value.findIndex(day => isSameDay(day, eventStart));
         const endDayIndex = days.value.findIndex(day => isSameDay(day, eventEnd));
 
-        console.log(eventEnd, lastDay.value);
-
         return {
             ...event,
             startColumn: startDayIndex,
             endColumn: endDayIndex + 1,
-        }
+        };
     }
 });
 
@@ -124,8 +124,24 @@ watch(days, () => {
     loadEvents();
 }, { deep: true });
 
+calendarEventsStore.$onAction(({ name, after }) => {
+    after(() => {
+        switch (name) {
+            case 'save':
+                loadEvents();
+                break;
+        }
+    });
+});
+
 const cellElement = ref<HTMLElement | null>(null);
-const { width } = useElementSize(cellElement);
+const { width: cellWidth } = useElementSize(cellElement, 50);
+
+const { openDialog } = useCalendarEventDialogStore();
+
+function editEvent(event: ICalendarEvent) {
+    openDialog(event)
+}
 </script>
 
 <template>
@@ -133,7 +149,8 @@ const { width } = useElementSize(cellElement);
         class="row"
         :style="{
             'grid-template-columns': `${WEEK_VIEW_SIDE_COLUMN_WIDTH} repeat(${ WEEK_LENGTH }, 1fr)`,
-            'height': `${(eventsGrid.length || 1) * parseInt(WEEK_VIEW_FULL_DATE_EVENT_HEIGH) + ((eventsGrid.length || 1) - 1) * parseInt(WEEK_VIEW_FULL_DATE_EVENT_GAP)}px`
+            'height': `${parseInt(WEEK_VIEW_CELL_PADDING) * 2 + (eventsGrid.length || 1) * parseInt(WEEK_VIEW_FULL_DATE_EVENT_HEIGH) + ((eventsGrid.length || 1) - 1) * parseInt(WEEK_VIEW_FULL_DATE_EVENT_GAP)}px`,
+            'min-height': `${parseInt(WEEK_VIEW_CELL_PADDING) * 2 + (eventsGrid.length || 1) * parseInt(WEEK_VIEW_FULL_DATE_EVENT_HEIGH) + ((eventsGrid.length || 1) - 1) * parseInt(WEEK_VIEW_FULL_DATE_EVENT_GAP)}px`
         }"
     >
         <div
@@ -146,6 +163,7 @@ const { width } = useElementSize(cellElement);
         >
             {{ getWeek(selectedDate) }} week
         </div>
+
         <div
             v-for="day in days"
             :key="day.getTime()"
@@ -155,11 +173,25 @@ const { width } = useElementSize(cellElement);
             }"
             ref="cellElement"
         ></div>
+
+        <template
+            v-for="(row, rowIndex) in eventsGrid"
+            :key="rowIndex"
+        >
+            <full-day-event
+                v-for="event in row"
+                :event="event"
+                :row-index="rowIndex"
+                :cell-width="cellWidth"
+                @click="editEvent(event)"
+            ></full-day-event>
+        </template>
     </div>
 </template>
 
 <style scoped>
 .row {
+    position: relative;
     display: grid;
     border-top: var(--calendar-default-border);
     border-bottom: var(--calendar-default-border);

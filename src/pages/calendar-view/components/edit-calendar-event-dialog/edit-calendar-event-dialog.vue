@@ -87,7 +87,7 @@ const submitForm = async () => {
         timeStart: formData.fullDay ? undefined : formData.timeStart,
         timeEnd: formData.fullDay ? undefined : formData.timeEnd,
     });
-    toast.success('Calendar event created');
+    toast.success(isEditing.value ? 'Calendar event updated' : 'Calendar event created');
 
     closeDialog();
 };
