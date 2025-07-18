@@ -18,69 +18,91 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-    <div class="timeline sm-flex sm-flex-col sm-overflow-y-auto">
+    <div class="sm-flex sm-flex-col sm-overflow-y-auto">
         <div
-            v-for="(hour, index) in HOURS_IN_DAY"
-            :key="hour"
-            class="row"
+            class="timeline sm-grid sm-overflow-y-auto"
             :style="{
-                'grid-template-columns': `${WEEK_VIEW_SIDE_COLUMN_WIDTH} repeat(${ WEEK_LENGTH }, 1fr)`,
+                height: `${parseInt(WEEK_VIEW_TIMELINE_ROW_HEIGH) * HOURS_IN_DAY}px`,
+                'min-height': `${parseInt(WEEK_VIEW_TIMELINE_ROW_HEIGH) * HOURS_IN_DAY}px`,
+                'grid-template-columns': `${WEEK_VIEW_SIDE_COLUMN_WIDTH} repeat(${ WEEK_LENGTH }, 1fr)`
             }"
         >
             <div
-                class="cell cell__time sm-flex sm-gap-8 sm-items-center sm-justify-center sm-ultra-light-primary-color sm-overflow-hidden sm-text-12"
+                class="column"
                 :style="{
-                    width: WEEK_VIEW_SIDE_COLUMN_WIDTH,
-                    'min-width': WEEK_VIEW_SIDE_COLUMN_WIDTH,
-                    'max-width': WEEK_VIEW_SIDE_COLUMN_WIDTH,
-                    height: WEEK_VIEW_TIMELINE_ROW_HEIGH
+                    'width': WEEK_VIEW_SIDE_COLUMN_WIDTH,
                 }"
             >
-                <span
-                    v-if="index + 1 !== HOURS_IN_DAY"
-                    class="time"
+                <template
+                    v-for="(hour, index) in HOURS_IN_DAY - 1"
+                    :key="hour"
                 >
-                    {{ hour.toString().padStart(2, '0') }}:00
-                </span>
+                    <span
+                        v-if="index + 1 !== HOURS_IN_DAY"
+                        class="time sm-ultra-light-primary-color sm-overflow-hidden sm-text-12 sm-text-center"
+                        :style="{
+                            width: WEEK_VIEW_SIDE_COLUMN_WIDTH,
+                            top: `${parseInt(WEEK_VIEW_TIMELINE_ROW_HEIGH) * (index + 1)}px`,
+                        }"
+                    >
+                        {{ hour.toString().padStart(2, '0') }}:00
+                    </span>
+                </template>
             </div>
             <div
                 v-for="day in days"
                 :key="day.getTime()"
-                class="cell sm-flex sm-flex-col sm-flex-1"
+                class="column"
                 :class="{
                     'is-today': isToday(day)
                 }"
+            ></div>
+            <template
+                v-for="(hour, index) in HOURS_IN_DAY - 1"
+                :key="hour"
             >
-            </div>
+                    <span
+                        v-if="index + 1 !== HOURS_IN_DAY"
+                        class="row-separator"
+                        :style="{
+                            top: `${parseInt(WEEK_VIEW_TIMELINE_ROW_HEIGH) * (index + 1)}px`,
+                            left: WEEK_VIEW_SIDE_COLUMN_WIDTH,
+                            right: 0
+                        }"
+                    ></span>
+            </template>
         </div>
     </div>
 </template>
 
 <style scoped>
-.row {
-    display: grid;
+.timeline {
+    position: relative;
 
-    &:not(:last-child) {
-        .cell:not(.cell__time) {
-            border-bottom: var(--calendar-default-border);
+    .column {
+        height: 100%;
+        min-height: 100%;
+
+        &:not(:last-of-type) {
+            border-right: var(--calendar-default-border);
+        }
+
+        &.is-today {
+            background-color: var(--calendar-today-cell-background-color);
         }
     }
 
-    .cell:not(:last-child) {
-        border-right: var(--calendar-default-border);
+    .row-separator {
+        position: absolute;
+        height: 1px;
+        min-height: 1px;
+        max-height: 1px;
+        background: var(--calendar-default-border-color);
     }
 
-    .cell.is-today {
-        background-color: var(--calendar-today-cell-background-color);
-    }
-
-    .cell__time {
-        align-items: end;
-        overflow: visible;
-
-        .time {
-            transform: translateY(0.5em);
-        }
+    .time {
+        position: absolute;
+        transform: translateY(-50%);
     }
 }
 </style>
