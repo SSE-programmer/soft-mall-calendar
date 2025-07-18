@@ -11,6 +11,8 @@ import GridHeader from '@/pages/calendar-view/components/calendar-view-week-grid
 import FullDayEventsRow from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-events-row.vue';
 import TimelineRows
     from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/timeline-rows.vue';
+import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
+import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 
 const { selectedDate } = storeToRefs(useCalendarStore());
 
@@ -19,6 +21,21 @@ const days = computed<Date[]>(() => {
 
     return Array.from({ length: WEEK_LENGTH }).map((_, index) => addDays(weekStart, index));
 });
+
+const calendarEventsStore = useCalendarEventsStore();
+const calendarStore = useCalendarStore();
+
+calendarEventsStore.$onAction(({name, args }) => {
+    if (name === 'save') {
+        setActualSelectedDate(args[0]);
+    }
+});
+
+function setActualSelectedDate(event: ICalendarEvent) {
+    if (event.calculatedStart < days.value[0] || event.calculatedEnd > days.value[days.value.length - 1]) {
+        calendarStore.setSelectedDate(event.calculatedStart);
+    }
+};
 </script>
 
 <template>
