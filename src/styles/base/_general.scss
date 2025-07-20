@@ -3,3 +3,17 @@ body {
     font-size: 18px;
     color: var(--sm-primary-color);
 }
+
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--sm-primary-color);
+    border-radius: 5px;
+}
