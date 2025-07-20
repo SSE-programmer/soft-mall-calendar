@@ -30,13 +30,13 @@ const calculateLeftPosition = (startColumn: number) => {
     const staticOffset = parseInt(WEEK_VIEW_CELL_PADDING) + parseInt(WEEK_VIEW_SIDE_COLUMN_WIDTH);
 
     return `calc(${staticOffset}px + (100% - ${staticOffset}px) / ${WEEK_LENGTH} * ${startColumn})`;
-}
+};
 
 const calculateWidth = (startColumn: number, endColumn: number) => {
     const staticOffset = parseInt(WEEK_VIEW_CELL_PADDING) + parseInt(WEEK_VIEW_SIDE_COLUMN_WIDTH);
 
     return `calc((100% - ${staticOffset}px) / ${WEEK_LENGTH} * ${endColumn - startColumn} - ${WEEK_VIEW_CELL_PADDING})`;
-}
+};
 </script>
 
 <template>
@@ -57,7 +57,10 @@ const calculateWidth = (startColumn: number, endColumn: number) => {
     </span>
 </template>
 
-<style scoped>
+<style
+    scoped
+    lang="scss"
+>
 .calendar-event {
     position: absolute;
     transition: .1s width;

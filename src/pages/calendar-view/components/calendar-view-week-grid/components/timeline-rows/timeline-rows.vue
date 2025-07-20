@@ -9,12 +9,17 @@ import {
     WEEK_VIEW_TIMELINE_ROW_HEIGH
 } from '@/pages/calendar-view/constants/calendar.ts';
 import { isToday } from 'date-fns';
+import CurrentTimeIndicator
+    from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/components/current-time-indicator.vue';
+import { computed } from 'vue';
 
 interface Props {
     days: Date[];
 }
 
 const props = defineProps<Props>();
+
+const activeColumnIndex = computed(() => props.days.findIndex(day => isToday(day)));
 </script>
 
 <template>
@@ -49,14 +54,16 @@ const props = defineProps<Props>();
                     </span>
                 </template>
             </div>
+
             <div
-                v-for="day in days"
+                v-for="(day, index) in days"
                 :key="day.getTime()"
                 class="column"
                 :class="{
                     'is-today': isToday(day)
                 }"
             ></div>
+
             <template
                 v-for="(hour, index) in HOURS_IN_DAY - 1"
                 :key="hour"
@@ -71,15 +78,24 @@ const props = defineProps<Props>();
                         }"
                     ></span>
             </template>
+
+            <current-time-indicator
+                v-if="activeColumnIndex !== -1"
+                :active-column-index="activeColumnIndex"
+            ></current-time-indicator>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style
+    scoped
+    lang="scss"
+>
 .timeline {
     position: relative;
 
     .column {
+        position: relative;
         height: 100%;
         min-height: 100%;
 

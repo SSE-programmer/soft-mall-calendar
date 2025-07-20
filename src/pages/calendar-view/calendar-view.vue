@@ -33,7 +33,6 @@ function createCalendarEvent() {
                 class="sm-w-full"
                 v-model="selectedDate"
                 inline
-                showWeek
             />
         </aside>
         <main class="sm-flex sm-flex-col sm-gap-12 sm-flex-1 sm-bg-light-background sm-w-full sm-p-16">

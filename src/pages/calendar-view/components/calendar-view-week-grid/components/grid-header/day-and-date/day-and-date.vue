@@ -28,7 +28,10 @@ const props = defineProps<Props>();
     </div>
 </template>
 
-<style scoped>
+<style
+    scoped
+    lang="scss"
+>
 .date {
     --weekend-color: #FF3F3F;
     --disabled-weekend-color: #ff7f7f;
