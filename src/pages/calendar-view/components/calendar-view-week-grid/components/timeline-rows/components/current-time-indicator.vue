@@ -68,6 +68,7 @@ const calculateIndicatorTopPosition = () => {
     position: absolute;
     left: 0;
     right: 0;
+    transform: translateY(-50%);
 
     user-select: none;
     pointer-events: none;
