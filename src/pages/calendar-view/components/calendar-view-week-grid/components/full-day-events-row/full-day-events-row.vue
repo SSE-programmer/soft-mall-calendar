@@ -193,6 +193,8 @@ function onDayCellClick(date: Date) {
                 :event="event"
                 :row-index="rowIndex"
                 @click="editEvent(event)"
+                @keydown.enter="editEvent(event)"
+                tabindex="0"
             ></full-day-event>
         </template>
     </div>
