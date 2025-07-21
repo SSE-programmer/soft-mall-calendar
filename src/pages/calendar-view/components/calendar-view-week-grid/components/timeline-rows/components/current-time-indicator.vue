@@ -46,8 +46,8 @@ const calculateIndicatorTopPosition = () => {
         <span
             class="line sm-error-background"
             :style="{
-                width: `${parseInt(calculateColumnWidth()) * activeColumnIndex}px`,
-                'min-width': `${parseInt(calculateColumnWidth()) * activeColumnIndex}px`,
+                width: `calc(${calculateColumnWidth()} * ${activeColumnIndex})`,
+                'min-width': `calc(${calculateColumnWidth()} * ${activeColumnIndex})`,
             }"
         ></span>
         <span
@@ -80,7 +80,6 @@ const calculateIndicatorTopPosition = () => {
 }
 
 .line {
-    width: 100%;
     height: 1px;
 }
 
