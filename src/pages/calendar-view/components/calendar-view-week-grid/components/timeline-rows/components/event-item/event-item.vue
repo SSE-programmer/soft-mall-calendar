@@ -16,7 +16,7 @@ const props = defineProps<Props>();
 
 <template>
     <span
-        class="calendar-event sm-flex sm-gap-4 sm-items-center sm-bg-middle-background sm-p-4 sm-border-radius-6 sm-light-accent-color sm-text-12"
+        class="calendar-event sm-flex sm-gap-4 sm-items-center sm-justify-center sm-bg-middle-background sm-p-4 sm-border-radius-6 sm-light-accent-color sm-text-12"
         :style="{
             top: preparedEvent.position.top,
             right: preparedEvent.position.right,
