@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { ICalendarEvent } from '@/pages/calendar-view/models/ICalendarEvent.ts';
 import { ref } from 'vue';
 import { reviver } from '@/shared/utils';
-import { type CalendarEventRangeUnit, getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils';
+import { type CalendarEventRangeUnit, getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils/calendar-event-range.ts';
 
 export const ID = 'calendar-events';
 export type CalendarEventsFilter = Partial<ICalendarEvent>;
@@ -21,6 +21,7 @@ export const useCalendarEventsStore = defineStore(ID, () => {
 
     function getDefaultCalendarEvent(): ICalendarEvent {
         return {
+            id: undefined,
             name: '',
             description: '',
             fullDay: false,

@@ -21,7 +21,7 @@ import IconUpload from '@/shared/components/icons/icon-upload.vue';
 import IconDownload from '@/shared/components/icons/icon-download.vue';
 import { combineDateAndTime } from '@/shared/utils/combine-date-and-time.ts';
 import IconTrash from '@/shared/components/icons/icon-trash.vue';
-import { getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils';
+import { getCalendarEventEnd, getCalendarEventStart } from '@/pages/calendar-view/utils/calendar-event-range.ts';
 
 const JSON_FILE_PREFIX = 'calendar-event_';
 

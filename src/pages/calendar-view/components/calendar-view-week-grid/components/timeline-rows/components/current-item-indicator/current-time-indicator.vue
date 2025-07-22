@@ -6,6 +6,9 @@
 import { format, hoursToMinutes } from 'date-fns';
 import { WEEK_LENGTH, WEEK_VIEW_SIDE_COLUMN_WIDTH } from '@/pages/calendar-view/constants/calendar.ts';
 import { useCurrentTime } from '@/shared/utils/use-current-time.ts';
+import {
+    getTopPositionByTime
+} from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/utils/get-top-position-by-time.ts';
 
 interface Props {
     activeColumnIndex: number;
@@ -16,22 +19,13 @@ const props = defineProps<Props>();
 const { currentTime } = useCurrentTime();
 
 const calculateColumnWidth = () => `calc((100% - ${WEEK_VIEW_SIDE_COLUMN_WIDTH}) / ${WEEK_LENGTH})`;
-
-const MINUTES_IN_DAY = 24 * 60;
-const calculateIndicatorTopPosition = () => {
-    const hours = currentTime.value.getHours();
-    const minutes = currentTime.value.getMinutes();
-    const totalMinutes = hoursToMinutes(hours) + minutes;
-
-    return `${totalMinutes / MINUTES_IN_DAY * 100}%`;
-};
 </script>
 
 <template>
     <div
         class="time-indicator sm-flex sm-items-center"
         :style="{
-            top: calculateIndicatorTopPosition()
+            top: getTopPositionByTime(currentTime)
         }"
     >
         <span
@@ -68,6 +62,7 @@ const calculateIndicatorTopPosition = () => {
     position: absolute;
     left: 0;
     right: 0;
+    z-index: 20;
     transform: translateY(-50%);
 
     user-select: none;

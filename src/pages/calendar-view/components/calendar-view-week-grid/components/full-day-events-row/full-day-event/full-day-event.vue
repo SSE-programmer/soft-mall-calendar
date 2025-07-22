@@ -68,9 +68,10 @@ const calculateWidth = (startColumn: number, endColumn: number) => {
     text-wrap: nowrap;
     overflow: hidden;
     cursor: pointer;
+    filter: opacity(.8);
 
     &:hover {
-        background-color: var(--sm-bg-primary-color);
+        filter: opacity(.9);
     }
 }
 </style>

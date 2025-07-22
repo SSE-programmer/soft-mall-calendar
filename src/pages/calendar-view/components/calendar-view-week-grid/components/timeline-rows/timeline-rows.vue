@@ -8,10 +8,18 @@ import {
     WEEK_VIEW_SIDE_COLUMN_WIDTH,
     WEEK_VIEW_TIMELINE_ROW_HEIGH
 } from '@/pages/calendar-view/constants/calendar.ts';
-import { isToday } from 'date-fns';
+import { isSameDay, isToday } from 'date-fns';
 import CurrentTimeIndicator
-    from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/components/current-time-indicator.vue';
-import { computed } from 'vue';
+    from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/components/current-item-indicator/current-time-indicator.vue';
+import { computed, toRef } from 'vue';
+import {
+    usePreparedEvents
+} from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/utils/use-prepared-events.ts';
+import EventItem
+    from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/components/event-item/event-item.vue';
+import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
+import FullDayEvent
+    from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-event/full-day-event.vue';
 
 interface Props {
     days: Date[];
@@ -19,7 +27,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { openDialog } = useCalendarEventDialogStore();
 const activeColumnIndex = computed(() => props.days.findIndex(day => isToday(day)));
+const preparedEvents = usePreparedEvents(toRef(props, 'days'));
 </script>
 
 <template>
@@ -62,7 +72,21 @@ const activeColumnIndex = computed(() => props.days.findIndex(day => isToday(day
                 :class="{
                     'is-today': isToday(day)
                 }"
-            ></div>
+            >
+                <template
+                    v-for="dayItem in preparedEvents.filter(item => isSameDay(item.day, day))"
+                    :key="dayItem.day.getTime()"
+                >
+                    <event-item
+                        v-for="event in dayItem.events.flat()"
+                        :key="event.id"
+                        :prepared-event="event"
+                        @click.stop="openDialog(event); $event.target.blur()"
+                        @keydown.enter="openDialog(event)"
+                        tabindex="0"
+                    ></event-item>
+                </template>
+            </div>
 
             <template
                 v-for="(hour, index) in HOURS_IN_DAY - 1"

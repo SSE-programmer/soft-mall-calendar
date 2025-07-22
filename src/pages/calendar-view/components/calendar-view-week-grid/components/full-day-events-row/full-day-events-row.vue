@@ -19,6 +19,7 @@ import FullDayEvent, {
     type IPreparedCalendarEvent
 } from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-event/full-day-event.vue';
 import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
+import { eventDurationComparator } from '@/pages/calendar-view/utils';
 
 interface Props {
     days: Date[];
@@ -29,17 +30,13 @@ const { days } = toRefs(props);
 const { selectedDate } = storeToRefs(useCalendarStore());
 const calendarEventsStore = useCalendarEventsStore();
 const { getEvents } = calendarEventsStore;
+const { openDialog } = useCalendarEventDialogStore();
 
 const firstDay = computed(() => days.value[0]);
 const lastDay = computed(() => days.value[days.value.length - 1]);
 
 const events = ref<ICalendarEvent[]>([]);
-const sortedEvents = computed(() => events.value.sort((a, b) => {
-    const aDuration = a.calculatedEnd.getTime() - a.calculatedStart.getTime();
-    const bDuration = b.calculatedEnd.getTime() - b.calculatedStart.getTime();
-
-    return aDuration - bDuration;
-}));
+const sortedEvents = computed(() => events.value.sort(eventDurationComparator));
 
 const eventsGrid = computed(() => {
     const result: IPreparedCalendarEvent[][] = [];
@@ -135,11 +132,6 @@ calendarEventsStore.$onAction(({ name, after }) => {
     });
 });
 
-const { openDialog } = useCalendarEventDialogStore();
-
-function editEvent(event: ICalendarEvent) {
-    openDialog(event);
-}
 
 function onDayCellClick(date: Date) {
     const { getDefaultCalendarEvent } = calendarEventsStore;
@@ -192,8 +184,8 @@ function onDayCellClick(date: Date) {
                 v-for="event in row"
                 :event="event"
                 :row-index="rowIndex"
-                @click="editEvent(event)"
-                @keydown.enter="editEvent(event)"
+                @click.stop="openDialog(event)"
+                @keydown.enter="openDialog(event)"
                 tabindex="0"
             ></full-day-event>
         </template>
