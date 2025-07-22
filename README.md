@@ -1,4 +1,22 @@
-# .
+# Calendar
+
+## Functionality:
+
+- Event creation/deletion
+
+- JSON import/export functionality
+
+- Form validation for event creation
+
+- Date-preloaded event creation via cell click
+
+- Auto-navigation to event start date
+
+- Real-time current time indicator with synchronization
+
+- View mode selector (day/week/year) with week view implementation
+
+- Keyboard navigation support (tabindex)
 
 This template should help get you started developing with Vue 3 in Vite.
 
