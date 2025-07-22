@@ -8,7 +8,7 @@ import {
     WEEK_VIEW_SIDE_COLUMN_WIDTH,
     WEEK_VIEW_TIMELINE_ROW_HEIGH
 } from '@/pages/calendar-view/constants/calendar.ts';
-import { isSameDay, isToday } from 'date-fns';
+import { isSameDay, isToday, setHours, setMinutes } from 'date-fns';
 import CurrentTimeIndicator
     from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/components/current-item-indicator/current-time-indicator.vue';
 import { computed, toRef } from 'vue';
@@ -18,8 +18,10 @@ import {
 import EventItem
     from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/components/event-item/event-item.vue';
 import { useCalendarEventDialogStore } from '@/stores/calendar/calendar-event-dialog.ts';
-import FullDayEvent
-    from '@/pages/calendar-view/components/calendar-view-week-grid/components/full-day-events-row/full-day-event/full-day-event.vue';
+import { useCalendarEventsStore } from '@/stores/calendar/calendar-events.ts';
+import {
+    MINUTES_IN_DAY
+} from '@/pages/calendar-view/components/calendar-view-week-grid/components/timeline-rows/utils/get-top-position-by-time.ts';
 
 interface Props {
     days: Date[];
@@ -28,8 +30,36 @@ interface Props {
 const props = defineProps<Props>();
 
 const { openDialog } = useCalendarEventDialogStore();
-const activeColumnIndex = computed(() => props.days.findIndex(day => isToday(day)));
+const calendarEventsStore = useCalendarEventsStore();
 const preparedEvents = usePreparedEvents(toRef(props, 'days'));
+const activeColumnIndex = computed(() => props.days.findIndex(day => isToday(day)));
+
+function onColumnClick(day: Date, event: MouseEvent) {
+    const { getDefaultCalendarEvent } = calendarEventsStore;
+    const eventDraft = getDefaultCalendarEvent();
+    const column = event.currentTarget;
+
+    if (!(column instanceof HTMLElement)) {
+        return;
+    }
+
+    const yOffset = event.offsetY;
+    const yPercent = yOffset / column.offsetHeight * 100;
+    const totalMinutes = MINUTES_IN_DAY / 100 * yPercent;
+
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const date = setMinutes(setHours(day, hours), minutes);
+
+    openDialog({
+        ...eventDraft,
+        dateStart: date,
+        dateEnd: date,
+        timeStart: date,
+        timeEnd: date,
+        fullDay: false
+    });
+}
 </script>
 
 <template>
@@ -66,12 +96,13 @@ const preparedEvents = usePreparedEvents(toRef(props, 'days'));
             </div>
 
             <div
-                v-for="(day, index) in days"
+                v-for="day in days"
                 :key="day.getTime()"
                 class="column"
                 :class="{
                     'is-today': isToday(day)
                 }"
+                @click="onColumnClick(day, $event)"
             >
                 <template
                     v-for="dayItem in preparedEvents.filter(item => isSameDay(item.day, day))"
